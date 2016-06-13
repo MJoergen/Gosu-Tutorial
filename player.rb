@@ -3,6 +3,7 @@ require 'gosu'
 class Player
 	def initialize
 		@image = Gosu::Image.new("media/starfighter.bmp")
+		@beep = Gosu::Sample.new("media/beep.wav")
 		@x = @y = @vel_x = @vel_y = @angle = 0.0
 		@score = 0
 	end
@@ -36,5 +37,21 @@ class Player
 	
 	def draw
 		@image.draw_rot(@x, @y, 1, @angle)
+	end
+	
+	def score
+		@score
+	end
+	
+	def collect_stars(stars)
+		stars.reject! do |star|
+			if Gosu::distance(@x, @y, star.x, star.y) < 35 then
+				@score += 10
+				@beep.play
+				true
+			else
+				false
+			end
+		end
 	end
 end
